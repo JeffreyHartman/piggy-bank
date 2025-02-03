@@ -1,6 +1,7 @@
 <!-- components/features/piggy-bank/PiggyBank.vue -->
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { Canvas, Circle } from 'fabric';
 
 interface Props {
   coins: number;
@@ -22,15 +23,77 @@ const piggyStyle = computed(() => ({
   transformOrigin: 'center', // Scale from center point
   transition: 'all 2.0s ease-out', // Smooth animation when size changes
 }));
+
+const canvasEl = ref<HTMLCanvasElement | null>(null);
+const fabricCanvas = ref<Canvas | null>(null);
+
+function updateCanvasSize() {
+  if (canvasEl.value && fabricCanvas.value) {
+    const container = canvasEl.value.parentElement;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      canvasEl.value.width = rect.width;
+      canvasEl.value.height = rect.height;
+      fabricCanvas.value.setDimensions(
+        {
+          width: rect.width,
+          height: rect.height,
+        },
+        {
+          cssOnly: false,
+        }
+      );
+
+      // Scale the canvas viewport to math the SVG's coordinate system
+      fabricCanvas.value.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    }
+  }
+}
+
+onMounted(() => {
+  if (canvasEl.value) {
+    // Initialize the canvas with the same dimensions as its container
+    const container = canvasEl.value.parentElement;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+
+      fabricCanvas.value = new Canvas(canvasEl.value, {
+        width: rect.width,
+        height: rect.height,
+        backgroundColor: 'transparent',
+        interactive: true,
+        preserveObjectStacking: true,
+      });
+
+      // Add a test circle in the middle of the viewport
+      const circle = new Circle({
+        radius: 10,
+        fill: 'red',
+        left: rect.width / 2, // Center horizontally
+        top: rect.height / 2, // Center vertically
+        originX: 'center',
+        originY: 'center',
+      });
+
+      fabricCanvas.value.add(circle);
+    }
+  }
+
+  window.addEventListener('resize', updateCanvasSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateCanvasSize);
+});
 </script>
 
 <template>
   <div class="piggy-containter grid place-items-center min-h-[200px] w-full">
-    <div class="w-full max-w-[800px] aspect-square">
+    <div class="w-full max-w-[800px] aspect-square relative ">
       <!-- Default Piggy SVG -->
       <svg
         viewBox="-6.23 -6.23 75.463 75.463"
-        class="w-full h-full transform-gpu"
+        class="w-full h-full transform-gpu absolute top-0 left-0 pointer-events-none"
       >
         <g :style="piggyStyle">
           <!-- Main piggy body -->
@@ -41,10 +104,8 @@ const piggyStyle = computed(() => ({
             stroke-width="0.5"
             transform="translate(-34.537 -37)"
           />
-
           <!-- Eye -->
           <circle cx="14.463" cy="29" r="2" fill="#333" />
-
           <!-- arc for coin slot -->
           <path
             d="M27.463,22.006A28.446,28.446,0,0,1,43.463,22.3"
@@ -55,6 +116,8 @@ const piggyStyle = computed(() => ({
           />
         </g>
       </svg>
+      <canvas ref="canvasEl" class="absolute top-0 left-0 w-full h-full">
+      </canvas>
     </div>
   </div>
 </template>
