@@ -1,8 +1,8 @@
 <!-- src/pages/Dashboard.vue -->
 <script setup lang="ts">
-import PigDisplay from '@/components/features/dashboard/PigDisplay.vue';
-import StatsPanel from '@/components/features/dashboard/StatsPanel.vue';
-import NotificationList from '@/components/features/dashboard/NotificationList.vue';
+import PigDisplay from '@/components/dashboard/PigDisplay.vue';
+import StatsPanel from '@/components/dashboard/StatsPanel.vue';
+import NotificationList from '@/components/dashboard/NotificationList.vue';
 </script>
 
 <template>

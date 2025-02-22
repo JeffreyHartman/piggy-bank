@@ -1,4 +1,4 @@
-<!-- src/components/features/dashboard/StatsPanel.vue -->
+<!-- src/components/dashboard/StatsPanel.vue -->
 <script setup lang="ts"></script>
 <template>
   <div class="bg-white rounded-lg shadow p-6">

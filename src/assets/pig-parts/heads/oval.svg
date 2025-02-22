@@ -1,0 +1,13 @@
+<!-- src/assets/pig-parts/heads/oval.svg -->
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Just a simple oval head -->
+  <ellipse 
+    cx="30" 
+    cy="30" 
+    rx="28" 
+    ry="22" 
+    fill="pink"
+    stroke="black"
+    stroke-width="1"
+  />
+</svg>
