@@ -1,23 +1,49 @@
+<!-- src/components/pig-designer/PigPreview.vue -->
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+
 const props = defineProps<{
   bodyComponent: string;
   headComponent: string;
 }>();
 
-const body = computed(() => props.bodyComponent);
-const head = computed(() => props.headComponent);
+// Use refs to store the actual SVG content
+const bodySvgContent = ref('');
+const headSvgContent = ref('');
+
+// Connection points defined in our coordinate system
+const bodyHeadConnection = { x: 20, y: 30 };
+const headBodyConnection = { x: 50, y: 30 };
+
+// Load SVG content
+onMounted(async () => {
+  // Fetch SVG content directly
+  const bodyResponse = await fetch(props.bodyComponent);
+  const headResponse = await fetch(props.headComponent);
+
+  bodySvgContent.value = await bodyResponse.text();
+  headSvgContent.value = await headResponse.text();
+});
+
+// Calculate head position to align connection points
+const headTransform = computed(() => {
+  // The offset needed to align the connection points
+  const dx = bodyHeadConnection.x - headBodyConnection.x;
+  const dy = bodyHeadConnection.y - headBodyConnection.y;
+
+  return `translate(${dx} ${dy})`;
+});
 </script>
 
 <template>
   <div class="h-96 bg-gray-50 rounded-lg flex items-center justify-center">
-    <!-- Container for our pig parts -->
-    <div class="relative w-96 h-96">
-      <!-- Body Layer -->
-      <img :src="body" class="absolute inset-0 w-full h-full" alt="pig body" />
+    <!-- Single SVG container with all parts -->
+    <svg viewBox="0 0 200 100" class="w-full h-full max-w-md">
+      <!-- Body group -->
+      <g v-html="bodySvgContent"></g>
 
-      <!-- Head Layer -->
-      <img :src="head" class="absolute left-0 w-1/2 h-1/2" alt="pig head" />
-    </div>
+      <!-- Head group with transform -->
+      <g :transform="headTransform" v-html="headSvgContent"></g>
+    </svg>
   </div>
 </template>
