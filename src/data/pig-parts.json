@@ -1,0 +1,80 @@
+{
+  "bodies": [
+    {
+      "id": "default",
+      "name": "Default Body",
+      "path": "/src/assets/pig-parts/bodies/default.svg",
+      "connectionPoints": {
+        "head": { "x": 70, "y": 40 }
+      },
+      "unlocked": true
+    }
+  ],
+  "heads": [
+    {
+      "id": "round",
+      "name": "Round Head",
+      "path": "/src/assets/pig-parts/heads/round.svg",
+      "connectionPoints": {
+        "body": { "x": 20, "y": 60 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "oval",
+      "name": "Oval Head",
+      "path": "/src/assets/pig-parts/heads/oval.svg",
+      "connectionPoints": {
+        "body": { "x": 25, "y": 65 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "happy",
+      "name": "Happy Head",
+      "path": "/src/assets/pig-parts/heads/happy.svg",
+      "connectionPoints": {
+        "body": { "x": 30, "y": 55 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "sad",
+      "name": "Sad Head",
+      "path": "/src/assets/pig-parts/heads/sad.svg",
+      "connectionPoints": {
+        "body": { "x": 30, "y": 55 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "grumpy",
+      "name": "Grumpy Head",
+      "path": "/src/assets/pig-parts/heads/grumpy.svg",
+      "connectionPoints": {
+        "body": { "x": 30, "y": 55 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "vampire",
+      "name": "Vampire Head",
+      "path": "/src/assets/pig-parts/heads/vampire.svg",
+      "connectionPoints": {
+        "body": { "x": 30, "y": 55 }
+      },
+      "unlocked": true
+    },
+    {
+      "id": "robot",
+      "name": "Robot Head",
+      "path": "/src/assets/pig-parts/heads/robot.svg",
+      "connectionPoints": {
+        "body": { "x": 30, "y": 55 }
+      },
+      "unlocked": true
+    }
+  ],
+  "ears": [],
+  "accessories": []
+}

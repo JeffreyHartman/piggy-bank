@@ -6,6 +6,9 @@ import path from 'path';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
+  json: {
+    stringify: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

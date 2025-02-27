@@ -1,104 +1,109 @@
+// src/stores/pigPartsStore.ts
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { PigPart, ConnectionPoint } from '../types/pig';
+import partsData from '../data/pig-parts.json';
+
+export interface ConnectionPoint {
+  x: number;
+  y: number;
+}
+
+export interface PigPart {
+  id: string;
+  name: string;
+  path: string;
+  connectionPoints: {
+    [key: string]: ConnectionPoint;
+  };
+  unlocked: boolean;
+}
+
+export interface UserPig {
+  bodyId: string;
+  headId: string;
+  earsId?: string;
+  accessoriesIds?: string[];
+}
 
 export const usePigPartsStore = defineStore('pigParts', () => {
-  // State
-  const availableParts = ref<PigPart[]>([
-    {
-      id: 'body-default',
-      name: 'Default Body',
-      type: 'body',
-      svgPath: '/src/assets/pig-parts/bodies/default.svg',
-      connectionPoints: {
-        head: { x: 70, y: 40 },
-      },
-      unlocked: true,
-      colorOptions: ['#FFB6C1', '#FFC0CB', '#FFDAB9'],
-    },
-    {
-      id: 'head-round',
-      name: 'Round Head',
-      type: 'head',
-      svgPath: '/src/assets/pig-parts/heads/round.svg',
-      connectionPoints: {
-        body: { x: 20, y: 60 },
-      },
-      unlocked: true,
-      colorOptions: ['#FFB6C1', '#FFC0CB', '#FFDAB9'],
-    },
-    {
-      id: 'head-oval',
-      name: 'Oval Head',
-      type: 'head',
-      svgPath: '/src/assets/pig-parts/heads/oval.svg',
-      connectionPoints: {
-        body: { x: 25, y: 65 },
-      },
-      unlocked: true,
-      colorOptions: ['#FFB6C1', '#FFC0CB', '#FFDAB9'],
-    },
-    // Add more parts here as you create them
-  ]);
+  // All available pig parts
+  const bodies = ref<PigPart[]>(partsData.bodies);
+  const heads = ref<PigPart[]>(partsData.heads);
+  const ears = ref<PigPart[]>(partsData.ears);
+  const accessories = ref<PigPart[]>(partsData.accessories);
 
-  // Current selected parts
-  const selectedParts = ref<{ [key: string]: string }>({
-    body: 'body-default',
-    head: 'head-round',
+  // Currently selected pig configuration
+  const selectedPig = ref<UserPig>({
+    bodyId: bodies.value[0]?.id || '',
+    headId: heads.value[0]?.id || '',
   });
 
-  // Getters
-  const getPartsByType = computed(() => (type: string) => {
-    return availableParts.value.filter((part) => part.type === type);
-  });
+  // Computed properties for selected parts
+  const selectedBody = computed(() =>
+    bodies.value.find((part) => part.id === selectedPig.value.bodyId)
+  );
 
-  const getSelectedPart = computed(() => (type: string) => {
-    const selectedId = selectedParts.value[type];
-    return availableParts.value.find((part) => part.id === selectedId);
-  });
+  const selectedHead = computed(() =>
+    heads.value.find((part) => part.id === selectedPig.value.headId)
+  );
 
-  // Actions
-  function selectPart(type: string, partId: string) {
-    if (
-      availableParts.value.some(
-        (part) => part.id === partId && part.type === type
-      )
-    ) {
-      selectedParts.value[type] = partId;
+  const selectedEars = computed(() =>
+    selectedPig.value.earsId
+      ? ears.value.find((part) => part.id === selectedPig.value.earsId)
+      : undefined
+  );
+
+  // Functions to update selections
+  function selectBody(bodyId: string) {
+    if (bodies.value.some((body) => body.id === bodyId)) {
+      selectedPig.value.bodyId = bodyId;
     }
   }
 
-  function addNewPart(part: PigPart) {
-    // Check if part with this ID already exists
-    if (!availableParts.value.some((p) => p.id === part.id)) {
-      availableParts.value.push(part);
+  function selectHead(headId: string) {
+    if (heads.value.some((head) => head.id === headId)) {
+      selectedPig.value.headId = headId;
     }
   }
 
-  function updatePartConnectionPoint(
-    partId: string,
-    connectionName: string,
-    point: ConnectionPoint
-  ) {
-    const partIndex = availableParts.value.findIndex((p) => p.id === partId);
-    if (partIndex !== -1) {
-      const part = availableParts.value[partIndex];
-      part.connectionPoints = {
-        ...part.connectionPoints,
-        [connectionName]: point,
-      };
-      // Update the part in the array
-      availableParts.value[partIndex] = { ...part };
+  function selectEars(earsId: string) {
+    if (ears.value.some((ear) => ear.id === earsId)) {
+      selectedPig.value.earsId = earsId;
     }
+  }
+
+  // Function to save a pig design
+  function savePigDesign(name: string): UserPig {
+    // In a real app, this would save to a database
+    // For now, we'll just return the current pig configuration
+    const pigDesign = { ...selectedPig.value, name };
+    console.log('Saved pig design:', pigDesign);
+    return pigDesign;
+  }
+
+  // Function to load a pig design
+  function loadPigDesign(pigDesign: UserPig) {
+    selectedPig.value = { ...pigDesign };
   }
 
   return {
-    availableParts,
-    selectedParts,
-    getPartsByType,
-    getSelectedPart,
-    selectPart,
-    addNewPart,
-    updatePartConnectionPoint,
+    // All parts
+    bodies,
+    heads,
+    ears,
+    accessories,
+
+    // Selected parts
+    selectedPig,
+    selectedBody,
+    selectedHead,
+    selectedEars,
+
+    // Actions
+    selectBody,
+    selectHead,
+    selectEars,
+    savePigDesign,
+    loadPigDesign,
   };
 });

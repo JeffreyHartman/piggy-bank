@@ -245,11 +245,15 @@ async function buildPigSvg() {
             circle.fill(element.getAttribute('fill') || '#FFB6C1');
 
             // Get stroke attributes and apply them correctly
-            const strokeColor = element.getAttribute('stroke') || '#000';
-            const strokeWidth = parseFloat(
-              element.getAttribute('stroke-width') || '1'
-            );
-            circle.stroke({ color: strokeColor, width: strokeWidth });
+            if (element.hasAttribute('stroke')) {
+              const strokeColor = element.getAttribute('stroke');
+              const strokeWidth = parseFloat(
+                element.getAttribute('stroke-width') || '1'
+              );
+              circle.stroke({ color: strokeColor, width: strokeWidth });
+            } else {
+              circle.stroke('none');
+            }
           } else if (element.tagName.toLowerCase() === 'ellipse') {
             const ellipse = bodyGroup.ellipse(
               parseFloat(element.getAttribute('rx') || '0') * 2,
@@ -263,12 +267,15 @@ async function buildPigSvg() {
             );
             ellipse.fill(element.getAttribute('fill') || '#FFB6C1');
 
-            // Get stroke attributes and apply them correctly
-            const strokeColor = element.getAttribute('stroke') || '#000';
-            const strokeWidth = parseFloat(
-              element.getAttribute('stroke-width') || '1'
-            );
-            ellipse.stroke({ color: strokeColor, width: strokeWidth });
+            if (element.hasAttribute('stroke')) {
+              const strokeColor = element.getAttribute('stroke');
+              const strokeWidth = parseFloat(
+                element.getAttribute('stroke-width') || '1'
+              );
+              ellipse.stroke({ color: strokeColor, width: strokeWidth });
+            } else {
+              ellipse.stroke('none');
+            }
           }
         }
       });
@@ -300,12 +307,15 @@ async function buildPigSvg() {
             );
             circle.fill(element.getAttribute('fill') || '#FFB6C1');
 
-            // Get stroke attributes and apply them correctly
-            const strokeColor = element.getAttribute('stroke') || '#000';
-            const strokeWidth = parseFloat(
-              element.getAttribute('stroke-width') || '1'
-            );
-            circle.stroke({ color: strokeColor, width: strokeWidth });
+            if (element.hasAttribute('stroke')) {
+              const strokeColor = element.getAttribute('stroke');
+              const strokeWidth = parseFloat(
+                element.getAttribute('stroke-width') || '1'
+              );
+              circle.stroke({ color: strokeColor, width: strokeWidth });
+            } else {
+              circle.stroke('none');
+            }
           } else if (element.tagName.toLowerCase() === 'ellipse') {
             const ellipse = headGroup.ellipse(
               parseFloat(element.getAttribute('rx') || '0') * 2,
@@ -319,12 +329,15 @@ async function buildPigSvg() {
             );
             ellipse.fill(element.getAttribute('fill') || '#FFB6C1');
 
-            // Get stroke attributes and apply them correctly
-            const strokeColor = element.getAttribute('stroke') || '#000';
-            const strokeWidth = parseFloat(
-              element.getAttribute('stroke-width') || '1'
-            );
-            ellipse.stroke({ color: strokeColor, width: strokeWidth });
+            if (element.hasAttribute('stroke')) {
+              const strokeColor = element.getAttribute('stroke');
+              const strokeWidth = parseFloat(
+                element.getAttribute('stroke-width') || '1'
+              );
+              ellipse.stroke({ color: strokeColor, width: strokeWidth });
+            } else {
+              ellipse.stroke('none');
+            }
           }
         }
       });
