@@ -10,7 +10,7 @@
     rx="45" 
     ry="25" 
     fill="pink"
-    stroke="black"
-    stroke-width="1"
+    stroke="#ff9999"
+    stroke-width="0.5"
   />
 </svg>
